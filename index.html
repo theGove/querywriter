@@ -1,0 +1,660 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="query.js"></script>
+    <link rel="stylesheet" href="query.css">
+    <title>Assisted Query Formulation</title>
+</head>
+<body>
+    <div class="query-editor">
+        <div class="query-diagram">
+            <svg id="diagram" xmlns="http://www.w3.org/2000/svg" height="208" width="432">
+                <style>
+                    .table {
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 14px;
+                        font-weight:bold;
+                        fill:white;
+                    }
+                    .field{
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 12px;
+                        fill:#444;
+                    }
+                    .key{
+                        font-weight:bold;
+                    }
+                    .table-box{
+                        fill:#316896;
+                        stroke:none;
+                    }
+                    .field-box{
+                        fill:white;
+                        stroke:none;
+                    }
+                    .field-hover{
+                        fill:darkblue;
+                        opacity:0;
+                        cursor:pointer;
+                    }
+                    .field-hover:hover{
+                        opacity:.2;
+                    }
+                    .table-hover{
+                        fill:white;
+                        opacity:0;
+                        cursor:pointer;
+                    }
+                    .table-hover:hover{
+                        opacity:.4;
+                    }
+                    .info-button {
+                        display:none;
+                        fill:gray;
+                        cursor:pointer;
+                    }
+        
+                    .info-button:hover {
+                        fill:darkgreen;
+                    }
+        
+                    .dd:hover .info-button {
+                        display: block;
+                    }
+                    .info{
+                        fill:white;
+                    }
+                    .assn{
+                        fill:none;
+                        stroke-width:1;
+                        stroke:#555;
+                    }
+                    .assn-mask{
+                        fill:none;
+                        stroke-width:7;
+                        opacity: 0;
+                        cursor:pointer;
+                        stroke:#555;
+                    }
+                    .assn-mask:hover{
+                        opacity: 0.3
+                    }
+                    .added-svg{
+                        font-family:  Arial, Helvetica, sans-serif;
+                        
+                    }
+                    .note-text{
+                        font-size: 10px;
+                    }
+                    .note-head{
+                        font-size: 8px;
+                    }
+                </style>
+                
+        
+          
+                
+        
+            <path d="M180,79 h112 a3,3 0 0 0 3,-3 v-32 a3,3 0 0 1 3,-3 h49" class="assn"></path>
+            <path d="M180,79 h112 a3,3 0 0 0 3,-3 v-32 a3,3 0 0 1 3,-3 h49" onclick="svg_diagram_click(event)" class="assn-mask" data-kind="link" data-fragment="work JOIN museum ON work.museum_id = museum.museum_id"></path>
+        
+            <path d="M87,43 h16.5 a3,3 0 0 1 3,3 v50 a3,3 0 0 0 3,3 h18.5" class="assn"></path>
+            <path d="M87,43 h16.5 a3,3 0 0 1 3,3 v50 a3,3 0 0 0 3,3 h18.5" onclick="svg_diagram_click(event)" class="assn-mask" data-kind="link" data-fragment="work JOIN artist ON work.artist_id = artist.artist_id"></path>
+        
+            <path d="M178,43 h36" class="assn"></path>
+            <path d="M178,43 h36" onclick="svg_diagram_click(event)" class="assn-mask" data-kind="link" data-fragment="subject JOIN work ON subject.work_id = work.work_id"></path>
+        
+            <path d="M319,133 h12 a3,3 0 0 0 3,-3 v-82 a3,3 0 0 1 3,-3 h10" class="assn"></path>
+            <path d="M319,133 h12 a3,3 0 0 0 3,-3 v-82 a3,3 0 0 1 3,-3 h10" onclick="svg_diagram_click(event)" class="assn-mask" data-kind="link" data-fragment="museum_hours JOIN museum ON museum_hours.museum_id = museum.museum_id"></path>
+        
+            <rect x="10" y="10" class="table-box" width="86" height="26"></rect>
+            <path id="artist_path" d="M10 23h86"></path>
+            <text class="table">
+              <textPath href="#artist_path" startOffset="50%" text-anchor="middle" dominant-baseline="middle">artist</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="VGFibGU6IGFydGlzdA==" data-text="RWFjaCByZWNvcmQgcmVwcmVzZW50cyB0aGUgYW4KYXJ0aXN0LiAg">
+              <rect x="10" y="10" class="table-hover" width="86" height="26" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist"></rect> 
+              <g onclick="d(event,'artist')" class="info-button">
+                <circle cx="96" cy="23" r="6"></circle>
+                <circle cx="96" cy="20" class="info" r="1.2"></circle>
+                <rect x="95" y="22" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="36" class="key field-box" width="86" height="18"></rect>
+            <path id="artist-artist_id_path" d="M10 45h86"></path>
+            <text class="key field">
+              <textPath href="#artist-artist_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">artist_id</textPath>
+            </text>
+            <g class="dd" data-height="56" data-width="162" data-title="YXJ0aXN0X2lkOiBJbnRlZ2Vy" data-text="QSB1bmlxdWUgaWRlbnRpZmllciBmb3IgZWFjaCBhcnRpc3QsCnVzZWQgdG8gZGlmZmVyZW50aWF0ZSBvbmUgYXJ0aXN0CmZyb20gYW5vdGhlciB3aGVuIGxpbmtpbmcgdG8Kb3RoZXIgdGFibGVzLg==">
+              <rect x="10" y="36" class="key field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.artist_id"></rect> 
+              <g onclick="d(event,'artist-artist_id')" class="info-button">
+                <circle cx="96" cy="45" r="6"></circle>
+                <circle cx="96" cy="42" class="info" r="1.2"></circle>
+                <rect x="95" y="44" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="54" class="field-box" width="86" height="18"></rect>
+            <path id="artist-full_name_path" d="M10 63h86"></path>
+            <text class="field">
+              <textPath href="#artist-full_name_path" startOffset="5" text-anchor="left" dominant-baseline="middle">full_name</textPath>
+            </text>
+            <g class="dd" data-height="103" data-width="162" data-title="ZnVsbF9uYW1lOiB2YXJjaGFyKDMwKQ==" data-text="VGhlIG5hbWUgYnkgd2hpY2ggYW4gYXJ0aXN0IGlzCmtub3duIGluIHRoZSBhcnQgaGlzdG9yeQpjb21tdW5pdHkuICBUaGlzIG1heSBub3QgaGF2ZSBhCnN0cm9uZyBjb25uZWN0aW9uIHRvIHRoZSBhcnRpc3RzCmdpdmVuIG5hbWVzLiAgRm9yIGV4YW1wbGUsIGFydGlzdApudW1iZXIgNjI3IGlzIGtub3cgYXMgVGl0aWFuCmV2ZW4gdGhvdWdoIGhpcyBnaXZlbiBsZWdhbCBuYW1lCmlzIFRpemlhbm8gVmVjZWxsaW8u">
+              <rect x="10" y="54" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.full_name"></rect> 
+              <g onclick="d(event,'artist-full_name')" class="info-button">
+                <circle cx="96" cy="63" r="6"></circle>
+                <circle cx="96" cy="60" class="info" r="1.2"></circle>
+                <rect x="95" y="62" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="72" class="field-box" width="86" height="18"></rect>
+            <path id="artist-first_name_path" d="M10 81h86"></path>
+            <text class="field">
+              <textPath href="#artist-first_name_path" startOffset="5" text-anchor="left" dominant-baseline="middle">first_name</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="155" data-title="Zmlyc3RfbmFtZTogY2hhcigxNSk=" data-text="VGhlIGZpcnN0IGdpdmVuIG5hbWUgb2YgdGhlIGFydGlzdA==">
+              <rect x="10" y="72" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.first_name"></rect> 
+              <g onclick="d(event,'artist-first_name')" class="info-button">
+                <circle cx="96" cy="81" r="6"></circle>
+                <circle cx="96" cy="78" class="info" r="1.2"></circle>
+                <rect x="95" y="80" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="90" class="field-box" width="86" height="18"></rect>
+            <path id="artist-middle_names_path" d="M10 99h86"></path>
+            <text class="field">
+              <textPath href="#artist-middle_names_path" startOffset="5" text-anchor="left" dominant-baseline="middle">middle_names</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="bWlkZGxlX25hbWVzOiBjaGFyKDIwKQ==" data-text="QW55IGFkZGl0aW9uYWwgZ2l2ZW4gbmFtZXMgb2YKdGhlIGFydGlzdCB0aGF0IGlzIG5vdCB0aGUgZmlyc3QgZ2l2ZW4KbmFtZQ==">
+              <rect x="10" y="90" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.middle_names"></rect> 
+              <g onclick="d(event,'artist-middle_names')" class="info-button">
+                <circle cx="96" cy="99" r="6"></circle>
+                <circle cx="96" cy="96" class="info" r="1.2"></circle>
+                <rect x="95" y="98" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="108" class="field-box" width="86" height="18"></rect>
+            <path id="artist-last_name_path" d="M10 117h86"></path>
+            <text class="field">
+              <textPath href="#artist-last_name_path" startOffset="5" text-anchor="left" dominant-baseline="middle">last_name</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="138" data-title="bGFzdF9uYW1lOiBjaGFyKDIwKQ==" data-text="VGhlIGZhbWlseSBuYW1lIG9mIHRoZSBhcnRpc3Q=">
+              <rect x="10" y="108" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.last_name"></rect> 
+              <g onclick="d(event,'artist-last_name')" class="info-button">
+                <circle cx="96" cy="117" r="6"></circle>
+                <circle cx="96" cy="114" class="info" r="1.2"></circle>
+                <rect x="95" y="116" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="126" class="field-box" width="86" height="18"></rect>
+            <path id="artist-nationality_path" d="M10 135h86"></path>
+            <text class="field">
+              <textPath href="#artist-nationality_path" startOffset="5" text-anchor="left" dominant-baseline="middle">nationality</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="bmF0aW9uYWxpdHk6IGNoYXIoMTAp" data-text="VGhlIG5hdGlvbmFsaXR5IG9mIHRoZSBhcnRpc3QuICBUaGlzCmlzIHR5cGljYWxseSBkZXRlcm1pbmVkIGJ5IHRoZQpjb3VudHJ5IG9mIGJpcnRoIG9mIHRoZSBhcnRpc3Q=">
+              <rect x="10" y="126" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.nationality"></rect> 
+              <g onclick="d(event,'artist-nationality')" class="info-button">
+                <circle cx="96" cy="135" r="6"></circle>
+                <circle cx="96" cy="132" class="info" r="1.2"></circle>
+                <rect x="95" y="134" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="144" class="field-box" width="86" height="18"></rect>
+            <path id="artist-style_path" d="M10 153h86"></path>
+            <text class="field">
+              <textPath href="#artist-style_path" startOffset="5" text-anchor="left" dominant-baseline="middle">style</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="c3R5bGU6IGNoYXIoMjAp" data-text="VGhlIHByZWRvbWluYW50IHN0eWxlIGluIHdoaWNoCnRoZSBhcnRpc3Qgd29ya2Vk">
+              <rect x="10" y="144" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.style"></rect> 
+              <g onclick="d(event,'artist-style')" class="info-button">
+                <circle cx="96" cy="153" r="6"></circle>
+                <circle cx="96" cy="150" class="info" r="1.2"></circle>
+                <rect x="95" y="152" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="162" class="field-box" width="86" height="18"></rect>
+            <path id="artist-birth_path" d="M10 171h86"></path>
+            <text class="field">
+              <textPath href="#artist-birth_path" startOffset="5" text-anchor="left" dominant-baseline="middle">birth</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="136" data-title="YmlydGg6IEludGVnZXI=" data-text="VGhlIHllYXIgdGhlIGFydGlzdCB3YXMgYm9ybg==">
+              <rect x="10" y="162" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.birth"></rect> 
+              <g onclick="d(event,'artist-birth')" class="info-button">
+                <circle cx="96" cy="171" r="6"></circle>
+                <circle cx="96" cy="168" class="info" r="1.2"></circle>
+                <rect x="95" y="170" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="10" y="180" class="field-box" width="86" height="18"></rect>
+            <path id="artist-death_path" d="M10 189h86"></path>
+            <text class="field">
+              <textPath href="#artist-death_path" startOffset="5" text-anchor="left" dominant-baseline="middle">death</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="114" data-title="ZGVhdGg6IEludGVnZXI=" data-text="VGhlIHllYXIgdGhlIGFydGlzdCBkaWVk">
+              <rect x="10" y="180" class="field-hover" width="86" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="artist.death"></rect> 
+              <g onclick="d(event,'artist-death')" class="info-button">
+                <circle cx="96" cy="189" r="6"></circle>
+                <circle cx="96" cy="186" class="info" r="1.2"></circle>
+                <rect x="95" y="188" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="10" class="table-box" width="70" height="26"></rect>
+            <path id="work_path" d="M116 23h70"></path>
+            <text class="table">
+              <textPath href="#work_path" startOffset="50%" text-anchor="middle" dominant-baseline="middle">work</textPath>
+            </text>
+            <g class="dd" data-height="68" data-width="162" data-title="VGFibGU6IHdvcms=" data-text="RWFjaCByZWNvcmQgcmVwcmVzZW50cyBhIHdvcmsgb2YKYXJ0IHRoYXQgd2FzIHBhaW50ZWQgYnkgb25lIG9mIHRoZQphcnRpc3RzIGluIHRoaXMgZGF0YWJhc2UgYW5kIGlzCmRpc3BsYXllZCBpbiBvbmUgb2YgdGhlIG11c2V1bXMKaW4gdGhpcyBkYXRhYmFzZS4gIA==">
+              <rect x="116" y="10" class="table-hover" width="70" height="26" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work"></rect> 
+              <g onclick="d(event,'work')" class="info-button">
+                <circle cx="186" cy="23" r="6"></circle>
+                <circle cx="186" cy="20" class="info" r="1.2"></circle>
+                <rect x="185" y="22" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="36" class="key field-box" width="70" height="18"></rect>
+            <path id="work-work_id_path" d="M116 45h70"></path>
+            <text class="key field">
+              <textPath href="#work-work_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">work_id</textPath>
+            </text>
+            <g class="dd" data-height="56" data-width="162" data-title="d29ya19pZDogSW50ZWdlcg==" data-text="QSB1bmlxdWUgaWRlbnRpZmllciBmb3IgZWFjaCB3b3JrCm9mIGFydCwgdXNlZCB0byBkaWZmZXJlbnRpYXRlIG9uZQp3b3JrIGZyb20gYW5vdGhlciBhcyB0d28gd29ya3MKY291bGQgaGF2ZSB0aGUgc2FtZSBuYW1lLg==">
+              <rect x="116" y="36" class="key field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.work_id"></rect> 
+              <g onclick="d(event,'work-work_id')" class="info-button">
+                <circle cx="186" cy="45" r="6"></circle>
+                <circle cx="186" cy="42" class="info" r="1.2"></circle>
+                <rect x="185" y="44" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="54" class="field-box" width="70" height="18"></rect>
+            <path id="work-name_path" d="M116 63h70"></path>
+            <text class="field">
+              <textPath href="#work-name_path" startOffset="5" text-anchor="left" dominant-baseline="middle">name</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="bmFtZTogdmFyY2hhcig1MCk=" data-text="VGhlIG5hbWUgb2YgdGhlIHdvcmsgb2YgYXJ0IGFzCmRlc2lnbmF0ZWQgYnkgdGhlIGFydGlzdCB3aG8KcGFpbnRlZCBpdA==">
+              <rect x="116" y="54" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.name"></rect> 
+              <g onclick="d(event,'work-name')" class="info-button">
+                <circle cx="186" cy="63" r="6"></circle>
+                <circle cx="186" cy="60" class="info" r="1.2"></circle>
+                <rect x="185" y="62" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="72" class="field-box" width="70" height="18"></rect>
+            <path id="work-museum_id_path" d="M116 81h70"></path>
+            <text class="field">
+              <textPath href="#work-museum_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">museum_id</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="bXVzZXVtX2lkOiBJbnRlZ2Vy" data-text="QSBmb3JlaWduIGtleSB0aGF0IGlkZW50aWZpZXMgdGhlCm11c2V1bSB3aGVyZSBhIHBhcnRpY3VsYXIgd29yawpvZiBhcnQgaXMgb24gZGlzcGxheQ==">
+              <rect x="116" y="72" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.museum_id"></rect> 
+              <g onclick="d(event,'work-museum_id')" class="info-button">
+                <circle cx="186" cy="81" r="6"></circle>
+                <circle cx="186" cy="78" class="info" r="1.2"></circle>
+                <rect x="185" y="80" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="90" class="field-box" width="70" height="18"></rect>
+            <path id="work-artist_id_path" d="M116 99h70"></path>
+            <text class="field">
+              <textPath href="#work-artist_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">artist_id</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="YXJ0aXN0X2lkOiBJbnRlZ2Vy" data-text="QSBmb3JlaWduIGtleSB0aGF0IGlkZW50aWZpZXMgdGhlCmFydGlzdCB3aG8gcGFpbnRlZCBhIHBhcnRpY3VsYXIKd29yayBvZiBhcnQ=">
+              <rect x="116" y="90" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.artist_id"></rect> 
+              <g onclick="d(event,'work-artist_id')" class="info-button">
+                <circle cx="186" cy="99" r="6"></circle>
+                <circle cx="186" cy="96" class="info" r="1.2"></circle>
+                <rect x="185" y="98" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="108" class="field-box" width="70" height="18"></rect>
+            <path id="work-style_path" d="M116 117h70"></path>
+            <text class="field">
+              <textPath href="#work-style_path" startOffset="5" text-anchor="left" dominant-baseline="middle">style</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="130" data-title="c3R5bGU6IGNoYXIoMjAp" data-text="VGhlIHN0eWxlIG9mIHRoZSB3b3JrIG9mIGFydA==">
+              <rect x="116" y="108" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.style"></rect> 
+              <g onclick="d(event,'work-style')" class="info-button">
+                <circle cx="186" cy="117" r="6"></circle>
+                <circle cx="186" cy="114" class="info" r="1.2"></circle>
+                <rect x="185" y="116" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="126" class="field-box" width="70" height="18"></rect>
+            <path id="work-width_path" d="M116 135h70"></path>
+            <text class="field">
+              <textPath href="#work-width_path" startOffset="5" text-anchor="left" dominant-baseline="middle">width</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="d2lkdGg6IEludGVnZXI=" data-text="VGhlIHdpZHRoIG9mIHRoZSBwYWludGluZyBpbgppbmNoZXM=">
+              <rect x="116" y="126" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.width"></rect> 
+              <g onclick="d(event,'work-width')" class="info-button">
+                <circle cx="186" cy="135" r="6"></circle>
+                <circle cx="186" cy="132" class="info" r="1.2"></circle>
+                <rect x="185" y="134" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="116" y="144" class="field-box" width="70" height="18"></rect>
+            <path id="work-height_path" d="M116 153h70"></path>
+            <text class="field">
+              <textPath href="#work-height_path" startOffset="5" text-anchor="left" dominant-baseline="middle">height</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="aGVpZ2h0OiBJbnRlZ2Vy" data-text="VGhlIGhlaWdodCBvZiB0aGUgcGFpbnRpbmcgaW4KaW5jaGVz">
+              <rect x="116" y="144" class="field-hover" width="70" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="work.height"></rect> 
+              <g onclick="d(event,'work-height')" class="info-button">
+                <circle cx="186" cy="153" r="6"></circle>
+                <circle cx="186" cy="150" class="info" r="1.2"></circle>
+                <rect x="185" y="152" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="206" y="10" class="table-box" width="69" height="26"></rect>
+            <path id="subject_path" d="M206 23h69"></path>
+            <text class="table">
+              <textPath href="#subject_path" startOffset="50%" text-anchor="middle" dominant-baseline="middle">subject</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="VGFibGU6IHN1YmplY3Q=" data-text="RWFjaCByZWNvcmQgZGVzY3JpYmVzIHNvbWVoaW5nCmFib3V0IHdoYXQgaXMgcmVwcmVzZW50ZWQgaW4gYQp3b3JrIG9mIGFydC4gIA==">
+              <rect x="206" y="10" class="table-hover" width="69" height="26" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="subject"></rect> 
+              <g onclick="d(event,'subject')" class="info-button">
+                <circle cx="275" cy="23" r="6"></circle>
+                <circle cx="275" cy="20" class="info" r="1.2"></circle>
+                <rect x="274" y="22" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="206" y="36" class="key field-box" width="69" height="18"></rect>
+            <path id="subject-work_id_path" d="M206 45h69"></path>
+            <text class="key field">
+              <textPath href="#subject-work_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">work_id</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="d29ya19pZDogSW50ZWdlcg==" data-text="QSBmb3JlaWduIGtleSBpbmRpY2F0ZXMgdGhlIHdvcmsKb2YgYXJ0IHRoYXQgcmVwcmVzZW50cyB0aGUgc3ViamVjdAppbmRpY2F0ZWQ=">
+              <rect x="206" y="36" class="key field-hover" width="69" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="subject.work_id"></rect> 
+              <g onclick="d(event,'subject-work_id')" class="info-button">
+                <circle cx="275" cy="45" r="6"></circle>
+                <circle cx="275" cy="42" class="info" r="1.2"></circle>
+                <rect x="274" y="44" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="206" y="54" class="key field-box" width="69" height="18"></rect>
+            <path id="subject-subject_path" d="M206 63h69"></path>
+            <text class="key field">
+              <textPath href="#subject-subject_path" startOffset="5" text-anchor="left" dominant-baseline="middle">subject</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="c3ViamVjdDogdmFyY2hhcigyNSk=" data-text="VGhlIHR5cGUgb2Ygc3ViamVjdCB0aGF0IGlzCnJlcHJlc2VudGVkIGluIGEgcGFydGljdWxhciB3b3JrCm9mIGFydA==">
+              <rect x="206" y="54" class="key field-hover" width="69" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="subject.subject"></rect> 
+              <g onclick="d(event,'subject-subject')" class="info-button">
+                <circle cx="275" cy="63" r="6"></circle>
+                <circle cx="275" cy="60" class="info" r="1.2"></circle>
+                <rect x="274" y="62" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="200" y="100" class="table-box" width="124" height="26"></rect>
+            <path id="museum_hours_path" d="M200 113h124"></path>
+            <text class="table">
+              <textPath href="#museum_hours_path" startOffset="50%" text-anchor="middle" dominant-baseline="middle">museum_hours</textPath>
+            </text>
+            <g class="dd" data-height="103" data-width="162" data-title="VGFibGU6IG11c2V1bV9ob3Vycw==" data-text="RWFjaCByZWNvcmQgcmVwcmVzZW50cyB0aGUgaG91cnMKdGhhdCBhIHBhcnRpY3VsYXIgbXVzZXVtCm5vcm1hbGx5IG9wZW5zIGFuZCBjbG9zZXMgb24gYQpwYXJ0aWN1bGFyIGRheSBvZiB0aGUgd2Vlay4gIElmIGEKbXVzZXVtIGRvZXMgbm90IGhhdmUgYW4gZW50cnkKaW4gdGhpcyB0YWJsZSBmb3IgYSBwYXJ0aWN1bGFyCndlZWtkYXksIGl0IGRvZXMgbm90IG9wZW4gb24gdGhhdApkYXk=">
+              <rect x="200" y="100" class="table-hover" width="124" height="26" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum_hours"></rect> 
+              <g onclick="d(event,'museum_hours')" class="info-button">
+                <circle cx="324" cy="113" r="6"></circle>
+                <circle cx="324" cy="110" class="info" r="1.2"></circle>
+                <rect x="323" y="112" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="200" y="126" class="key field-box" width="124" height="18"></rect>
+            <path id="museum_hours-museum_id_path" d="M200 135h124"></path>
+            <text class="key field">
+              <textPath href="#museum_hours-museum_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">museum_id</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="bXVzZXVtX2lkOiBJbnRlZ2Vy" data-text="QSBmb3JlaWduIGtleSB0aGF0IGluZGljYXRlcyB0aGUKbXVzZXVtIHRvIHdoaWNoIHRoZSByZWNvcmQgb2YKb3BlbmluZyBhbmQgY2xvc2luZyBwZXJ0YWlucy4=">
+              <rect x="200" y="126" class="key field-hover" width="124" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum_hours.museum_id"></rect> 
+              <g onclick="d(event,'museum_hours-museum_id')" class="info-button">
+                <circle cx="324" cy="135" r="6"></circle>
+                <circle cx="324" cy="132" class="info" r="1.2"></circle>
+                <rect x="323" y="134" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="200" y="144" class="key field-box" width="124" height="18"></rect>
+            <path id="museum_hours-day_path" d="M200 153h124"></path>
+            <text class="key field">
+              <textPath href="#museum_hours-day_path" startOffset="5" text-anchor="left" dominant-baseline="middle">day</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="ZGF5OiBjaGFyKDEwKQ==" data-text="VGhlIGRheSBvZiB0aGUgd2VlayB0aGF0IGEKcGFydGljdWFsciBvcGVuIGFuZCBjbG9zZSB0aW1lcwphcHBseSB0byBhIHBhcnRpY3VsYXIgbXVzZXVt">
+              <rect x="200" y="144" class="key field-hover" width="124" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum_hours.day"></rect> 
+              <g onclick="d(event,'museum_hours-day')" class="info-button">
+                <circle cx="324" cy="153" r="6"></circle>
+                <circle cx="324" cy="150" class="info" r="1.2"></circle>
+                <rect x="323" y="152" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="200" y="162" class="field-box" width="124" height="18"></rect>
+            <path id="museum_hours-open_path" d="M200 171h124"></path>
+            <text class="field">
+              <textPath href="#museum_hours-open_path" startOffset="5" text-anchor="left" dominant-baseline="middle">open</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="b3BlbjogY2hhcigxMCk=" data-text="VGhlIHRpbWUgdGhhdCBhIHBhcnRpY3VsYXIKbXVzZXVtIG9wZW5zIG9uIGEgcGFydGljdWxhcgp3ZWVrZGF5">
+              <rect x="200" y="162" class="field-hover" width="124" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum_hours.open"></rect> 
+              <g onclick="d(event,'museum_hours-open')" class="info-button">
+                <circle cx="324" cy="171" r="6"></circle>
+                <circle cx="324" cy="168" class="info" r="1.2"></circle>
+                <rect x="323" y="170" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="200" y="180" class="field-box" width="124" height="18"></rect>
+            <path id="museum_hours-close_path" d="M200 189h124"></path>
+            <text class="field">
+              <textPath href="#museum_hours-close_path" startOffset="5" text-anchor="left" dominant-baseline="middle">close</textPath>
+            </text>
+            <g class="dd" data-height="44" data-width="162" data-title="Y2xvc2U6IGNoYXIoMTAp" data-text="VGhlIHRpbWUgdGhhdCBhIHBhcnRpY3VsYXIKbXVzZXVtIGNsb3NlcyBvbiBhIHBhcnRpY3VsYXIKd2Vla2RheQ==">
+              <rect x="200" y="180" class="field-hover" width="124" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum_hours.close"></rect> 
+              <g onclick="d(event,'museum_hours-close')" class="info-button">
+                <circle cx="324" cy="189" r="6"></circle>
+                <circle cx="324" cy="186" class="info" r="1.2"></circle>
+                <rect x="323" y="188" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="10" class="table-box" width="78" height="26"></rect>
+            <path id="museum_path" d="M344 23h78"></path>
+            <text class="table">
+              <textPath href="#museum_path" startOffset="50%" text-anchor="middle" dominant-baseline="middle">museum</textPath>
+            </text>
+            <g class="dd" data-height="56" data-width="162" data-title="VGFibGU6IG11c2V1bQ==" data-text="RWFjaCByZWNvcmQgcmVwcmVzZW50cyBhCm11c2V1bSB3aGVyZSBhdCBsZWFzdCBvbmUKcGFpbnRpbmcgbGlzdGVkIGluIHRoZSBXb3JrIHRhYmxlIGlzCm9uIGRpc3BsYXk=">
+              <rect x="344" y="10" class="table-hover" width="78" height="26" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum"></rect> 
+              <g onclick="d(event,'museum')" class="info-button">
+                <circle cx="422" cy="23" r="6"></circle>
+                <circle cx="422" cy="20" class="info" r="1.2"></circle>
+                <rect x="421" y="22" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="36" class="key field-box" width="78" height="18"></rect>
+            <path id="museum-museum_id_path" d="M344 45h78"></path>
+            <text class="key field">
+              <textPath href="#museum-museum_id_path" startOffset="5" text-anchor="left" dominant-baseline="middle">museum_id</textPath>
+            </text>
+            <g class="dd" data-height="56" data-width="162" data-title="bXVzZXVtX2lkOiBJbnRlZ2Vy" data-text="QSB1bmlxdWUgaWRlbnRpZmllciBmb3IgZWFjaAptdXNldW0sIHVzZWQgdG8gZGlmZmVyZW50aWF0ZQpvbmUgbXVzZXVtIGZyb20gYW5vdGhlciB3aGVuCmxpbmtpbmcgdG8gb3RoZXIgdGFibGVzLg==">
+              <rect x="344" y="36" class="key field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.museum_id"></rect> 
+              <g onclick="d(event,'museum-museum_id')" class="info-button">
+                <circle cx="422" cy="45" r="6"></circle>
+                <circle cx="422" cy="42" class="info" r="1.2"></circle>
+                <rect x="421" y="44" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="54" class="field-box" width="78" height="18"></rect>
+            <path id="museum-name_path" d="M344 63h78"></path>
+            <text class="field">
+              <textPath href="#museum-name_path" startOffset="5" text-anchor="left" dominant-baseline="middle">name</textPath>
+            </text>
+            <g class="dd" data-height="20" data-width="137" data-title="bmFtZTogdmFyY2hhcig1MCk=" data-text="VGhlIG5hbWUgb2Ygb2YgdGhlIG11c2V1bQ==">
+              <rect x="344" y="54" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.name"></rect> 
+              <g onclick="d(event,'museum-name')" class="info-button">
+                <circle cx="422" cy="63" r="6"></circle>
+                <circle cx="422" cy="60" class="info" r="1.2"></circle>
+                <rect x="421" y="62" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="72" class="field-box" width="78" height="18"></rect>
+            <path id="museum-address_path" d="M344 81h78"></path>
+            <text class="field">
+              <textPath href="#museum-address_path" startOffset="5" text-anchor="left" dominant-baseline="middle">address</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="YWRkcmVzczogdmFyY2hhcigzNSk=" data-text="VGhlIHN0cmVldCBhZGRyZXNzIG9mIHRoZSBtYWluCnBoeXNpY2FsIGxvYWN0aW9uIG9mIHRoZSBtdXNldW0=">
+              <rect x="344" y="72" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.address"></rect> 
+              <g onclick="d(event,'museum-address')" class="info-button">
+                <circle cx="422" cy="81" r="6"></circle>
+                <circle cx="422" cy="78" class="info" r="1.2"></circle>
+                <rect x="421" y="80" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="90" class="field-box" width="78" height="18"></rect>
+            <path id="museum-city_path" d="M344 99h78"></path>
+            <text class="field">
+              <textPath href="#museum-city_path" startOffset="5" text-anchor="left" dominant-baseline="middle">city</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="Y2l0eTogY2hhcigxNSk=" data-text="VGhlIGNpdHkgb2YgdGhlIG1haW4gcGh5c2ljYWwKbG9jYXRpb24gb2YgdGhlIG11c2V1bQ==">
+              <rect x="344" y="90" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.city"></rect> 
+              <g onclick="d(event,'museum-city')" class="info-button">
+                <circle cx="422" cy="99" r="6"></circle>
+                <circle cx="422" cy="96" class="info" r="1.2"></circle>
+                <rect x="421" y="98" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="108" class="field-box" width="78" height="18"></rect>
+            <path id="museum-state_path" d="M344 117h78"></path>
+            <text class="field">
+              <textPath href="#museum-state_path" startOffset="5" text-anchor="left" dominant-baseline="middle">state</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="c3RhdGU6IGNoYXIoMTUp" data-text="VGhlIHN0YXRlIG9mIHRoZSBtYWluIHBoeXNpY2FsCmxvY2F0aW9uIG9mIHRoZSBtdXNldW0=">
+              <rect x="344" y="108" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.state"></rect> 
+              <g onclick="d(event,'museum-state')" class="info-button">
+                <circle cx="422" cy="117" r="6"></circle>
+                <circle cx="422" cy="114" class="info" r="1.2"></circle>
+                <rect x="421" y="116" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="126" class="field-box" width="78" height="18"></rect>
+            <path id="museum-postal_path" d="M344 135h78"></path>
+            <text class="field">
+              <textPath href="#museum-postal_path" startOffset="5" text-anchor="left" dominant-baseline="middle">postal</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="cG9zdGFsOiBjaGFyKDEwKQ==" data-text="VGhlIHBvc3RhbCBjb2RlIG9mIHRoZSBtYWluCnBoeXNpY2FsIGxvY2F0aW9uIG9mIHRoZSBtdXNldW0=">
+              <rect x="344" y="126" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.postal"></rect> 
+              <g onclick="d(event,'museum-postal')" class="info-button">
+                <circle cx="422" cy="135" r="6"></circle>
+                <circle cx="422" cy="132" class="info" r="1.2"></circle>
+                <rect x="421" y="134" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="144" class="field-box" width="78" height="18"></rect>
+            <path id="museum-country_path" d="M344 153h78"></path>
+            <text class="field">
+              <textPath href="#museum-country_path" startOffset="5" text-anchor="left" dominant-baseline="middle">country</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="Y291bnRyeTogY2hhcigxNSk=" data-text="VGhlIGNvdW50cnkgb2YgdGhlIG1haW4gcGh5c2ljYWwKbG9jYXRpb24gb2YgdGhlIG11c2V1bQ==">
+              <rect x="344" y="144" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.country"></rect> 
+              <g onclick="d(event,'museum-country')" class="info-button">
+                <circle cx="422" cy="153" r="6"></circle>
+                <circle cx="422" cy="150" class="info" r="1.2"></circle>
+                <rect x="421" y="152" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="162" class="field-box" width="78" height="18"></rect>
+            <path id="museum-phone_path" d="M344 171h78"></path>
+            <text class="field">
+              <textPath href="#museum-phone_path" startOffset="5" text-anchor="left" dominant-baseline="middle">phone</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="cGhvbmU6IGNoYXIoMjAp" data-text="VGhlIG1haW4gdGVsZXBob25lIG51bWJlciB0bwpjYWxsIHRoZSBtdXNldW0=">
+              <rect x="344" y="162" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.phone"></rect> 
+              <g onclick="d(event,'museum-phone')" class="info-button">
+                <circle cx="422" cy="171" r="6"></circle>
+                <circle cx="422" cy="168" class="info" r="1.2"></circle>
+                <rect x="421" y="170" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+            <rect x="344" y="180" class="field-box" width="78" height="18"></rect>
+            <path id="museum-url_path" d="M344 189h78"></path>
+            <text class="field">
+              <textPath href="#museum-url_path" startOffset="5" text-anchor="left" dominant-baseline="middle">url</textPath>
+            </text>
+            <g class="dd" data-height="32" data-width="162" data-title="dXJsOiB2YXJjaGFyKDU1KQ==" data-text="VGhlIFVSTCB0byB0aGUgbWFpbiB3ZWJzaXRlIGZvcgp0aGUgbXVzZXVt">
+              <rect x="344" y="180" class="field-hover" width="78" height="18" onclick="svg_diagram_click(event)" data-kind="table" data-fragment="museum.url"></rect> 
+              <g onclick="d(event,'museum-url')" class="info-button">
+                <circle cx="422" cy="189" r="6"></circle>
+                <circle cx="422" cy="186" class="info" r="1.2"></circle>
+                <rect x="421" y="188" width="2" height="5" class="info"></rect>
+              </g>
+            </g>
+            
+        
+        </svg>
+        </div>
+        <div>
+            <div class="code-container">
+                <textarea id="query" class="language-sql" placeholder="Enter SQL Here"></textarea>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
