@@ -2,23 +2,23 @@
     background-color: #ddd;
     padding:1rem 0;
     margin:auto;
-    width:800px;
+    width:50rem;
     text-align: center;
 }
 .code-container{
-    width:800;
+    width:800px;
     margin:auto;
+    padding:0
  }
 .language-sql{
     background-color: #444;
-    padding:1rem;
     white-space: pre-wrap;
     display: block;
     color:lightgreen;
-    width:100%;
+    width:48rem;
     height:10rem;
+    padding: 1rem;
 }
 
-.query-editor{
-}
+
 
